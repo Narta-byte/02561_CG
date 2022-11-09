@@ -20,7 +20,6 @@ window.onload = function init()
     var vd = vec4(0.816497, -0.471405, -0.333333, 1);
     var vBuffer = gl.createBuffer();
     var numTimesToSubdivide = 3;
-    var numSubdivs = 3;
     var va = vec4(0.0, 0.0, 1.0, 1);
     var color = []
     var normalsArray = []
@@ -38,34 +37,33 @@ window.onload = function init()
     var Ka = 0.0;
     var kd = 1.0;
     var ks = 1.0;
-    var a = 0.0;
     var s = 10.0;
     var le = vec4(1.0,1.0,1.0,1.0);
-    // var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0);
-    // var lightDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
-    // var lightSpecular = vec4(1.0, 1.0, 1.0, 1.0);
-    // var attenuationConstant, attenuationLinear, attenuationQuadratic;
-    // var materialAmbient = vec4(1.0, 0.0, 1.0, 1.0);
-    // var materialDiffuse = vec4(1.0, 0.8, 0.0, 1.0);
-    // var materialSpecular = vec4(1.0, 0.8, 0.0, 1.0);
-    // var materialShininess = 100.0;
-    // var backAmbient, backDiffuse, backSpecular;
-    // var emission = vec4(0.0, 0.3, 0.3, 1.0);
-    // var ambientColor, diffuseColor, specularColor;
-    // //var lightPosition;
-    // var  ambient, diffuse, specular;
-    // var ambientProduct;
+
+    initObject(program, obj_filename, scale)
+
     
+
+
 
     gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
 
-    spaghetti()
-    function spaghetti() {
+    draw()
+    function draw() {
         pointsArray = []
         index = 0
         gl.vBuffer = null;
         
-        tetrahedron(va, vb, vc, vd, numTimesToSubdivide);
+        // tetrahedron(va, vb, vc, vd, numTimesToSubdivide);
+
+
+
+
+
+
+
+
+
         gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
         var vPosition = gl.getAttribLocation(program, "a_Position");
@@ -129,12 +127,23 @@ window.onload = function init()
         // gl.vertexAttribPointer(acolor, 4, gl.FLOAT, false, 0, 0);
         // gl.enableVertexAttribArray(acolor);
     }
+    function initObject(gl, obj_filename, scale)
+    {
+    gl.program.a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+    gl.program.a_Normal = gl.getAttribLocation(gl.program, 'a_Normal');
+    gl.program.a_Color = gl.getAttribLocation(gl.program, 'a_Color');
+    // Prepare empty buffer objects for vertex coordinates, colors, and normals
+    var model = initVertexBuffers(gl);
+    // Start reading the OBJ file
+    readOBJFile(obj_filename, gl, model, scale, true);
+    return model;
+    }
     var poi = document.getElementById("Increase subdivision");
     poi.addEventListener("click", function (ev) {
         console.log("Increase subdivision");
         numSubdivs+=1
         numTimesToSubdivide+=1
-        spaghetti();
+        draw();
 
     });
     var tri = document.getElementById("Decrease subdivision");
@@ -142,7 +151,7 @@ window.onload = function init()
         console.log("Decrease subdivision");
         numSubdivs-=1
         numTimesToSubdivide-=1
-        spaghetti();
+        draw();
 
     });
     var sliderSpeed = document.getElementById("speedSlider");
@@ -282,6 +291,12 @@ window.onload = function init()
    
     function render(gl, numPoints)
     {
+        if (!g_drawingInfo && g_objDoc && g_objDoc.isMTLComplete()) {
+            // OBJ and all MTLs are available
+            g_drawingInfo = onReadComplete(gl, model, g_objDoc);
+            }
+            if (!g_drawingInfo) return;
+            
         beta += speed*0.01;
         alpha +=speed*0.01;
         eye = vec3(r*Math.sin(alpha),0,r*Math.cos(alpha))
