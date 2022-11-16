@@ -3,7 +3,7 @@
     <script type="text/javascript" src="../common/angelCommon/initShaders.js"></script>
     <script type="text/javascript" src="../common/angelCommon/webgl-utils.js"></script>
     <script type="text/javascript" src="../common/angelCommon/MV.js"></script>
-    <script type="text/javascript" src="worksheet6part1.js"></script>
+    <script type="text/javascript" src="worksheet6part2.js"></script>
     <script id="vertex-shader" type="x-shader/x-vertex">
         attribute vec4 a_Position;
         attribute vec4 a_Color;
@@ -61,6 +61,25 @@
 
     <body>
         <canvas id="canvas" width = "512" height = "512"> </canvas>
+        <br>
+        <select id="texture_wrapping" >
+            <option value="0" selected>CLAMP</option>
+            <option value="1">REPEAT</option>
+            </select> 
+        texture_filtering_minification
+        <select id="texture_filtering_minification" >
+            <option value="0" selected>NEAREST</option>
+            <option value="1">LINEAR</option>
+            <option value="2">gl.NEAREST_MIPMAP_NEAREST</option>
+            <option value="3">gl.LINEAR_MIPMAP_NEAREST</option>
+            <option value="4">gl.NEAREST_MIPMAP_LINEAR</option>
+            <option value="5">gl.LINEAR_MIPMAP_LINEAR</option>
+            </select> 
+        texture_filtering_magnification
+        <select id="texture_filtering_magnification" >
+            <option value="0" selected>NEAREST</option>
+            <option value="1">LINEAR</option>
+            </select>
         <title> Hello World </title>
         
 

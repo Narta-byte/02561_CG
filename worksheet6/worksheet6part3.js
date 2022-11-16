@@ -36,7 +36,28 @@ window.onload = function init()
     var modelViewMatrixLoc = gl.getUniformLocation(program, "ModelViewPosition");
     gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
 
+    var image = document.createElement('earth');
+    image.crossorigin = 'anonymous';
+    image.onload = function () {
+        // Insert WebGL texture initialization here
+        var texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        
+        gl.generateMipmap(gl.TEXTURE_2D); //hmm
+        
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        // gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST); //hmm
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
+
+        var myTexels = new Image();
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, image);
+        
+    };
+    image.src = 'earth.jpg';
     
     spaghetti()
     function spaghetti() {
@@ -109,49 +130,7 @@ window.onload = function init()
         spaghetti();
 
     });
-    var image = document.createElement('earth');
-    image.crossorigin = 'anonymous';
-    image.onload = function () {
-        // Insert WebGL texture initialization here
-
-        var texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-
-        
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-        // gl.generateMipmap(gl.TEXTURE_2D);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST); //hmm
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-
-        var myTexels = new Image();
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,
-        gl.UNSIGNED_BYTE, myTexels);
-        gl.generateMipmap(gl.TEXTURE_2D); //hmm
-
-        var texBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, texBuffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, flatten(texCoords),
-        gl.STATIC_DRAW);
-        
-        var vTexCoord = gl.getAttribLocation(program, "vTexCoord");
-        gl.vertexAttribPointer(vTexCoord, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(vTexCoord);
-        
-        
-        var texture = createTexture();
-        gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0);
-        
-        var vTexCoord = gl.getAttribLocation(program, "vTexCoord"); //hmm
-        gl.vertexAttribPointer(vTexture, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(vTexture);
-        
-        
-        
-    };
-    image.src = 'earth.jpg';
+    
 
 
     function tetrahedron(a, b, c, d, n)

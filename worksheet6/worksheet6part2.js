@@ -66,7 +66,74 @@ window.onload = function init()
     //     myTexels[4*i*texSize+4*j+3] = 255;
     //     }
     //     }
-    
+    var menu = document.getElementById("texture_wrapping");
+    menu.addEventListener("click", function(ev) {
+        console.log("we are here")
+        switch (menu.selectedIndex) {
+            case 0:
+                console.log("CLAMP");
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                break;
+            case 1:
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+                console.log("REPEAT");
+                
+                break;
+            default:
+                break;
+        }
+        
+    });
+    var menu2 = document.getElementById("texture_filtering_minification");
+    menu2.addEventListener("click", function(ev) {
+        console.log("we are here")
+        switch (menu2.selectedIndex) {
+            case 0:
+                console.log("NEAREST");
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+                break;
+            case 1: 
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                console.log("LINEAR");
+                break;
+            case 2:
+                console.log("MIPMAP");
+                // gl.generateMipmap(gl.TEXTURE_2D);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST);
+                break;
+            case 3: 
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+                break;
+            case 4: 
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl. NEAREST_MIPMAP_LINEAR);
+                break;
+            case 5: 
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+                break;
+            default:
+                break;
+        }
+        
+    });
+    var menu3 = document.getElementById("texture_filtering_magnification");
+    menu3.addEventListener("click", function(ev) {
+        console.log("we are here")
+        switch (menu3.selectedIndex) {
+            case 0:
+                console.log("NEAREST");
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+                break;
+            case 1: 
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                console.log("LINEAR");
+                break;
+            default:
+                break;
+        }
+        
+    });
 
     var Ploc = gl.getUniformLocation(program,"P");
     var p = perspective(90, (canvas.height/canvas.width), 0.01, 20.0);
@@ -105,11 +172,11 @@ window.onload = function init()
 
    
 
+    gl.generateMipmap(gl.TEXTURE_2D);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-    // gl.generateMipmap(gl.TEXTURE_2D);
 
 
     gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0); //hmmm

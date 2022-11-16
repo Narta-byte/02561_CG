@@ -120,7 +120,7 @@ window.onload = function init()
         console.log("Clearing Canvas");
         index = 0;
     });
-    var menu = document.getElementById("colorMenu");
+    var menu = document.getElementById("texture_wrapping");
     menu.addEventListener("click", function(ev) {
         console.log("we are here")
         switch (menu.selectedIndex) {
