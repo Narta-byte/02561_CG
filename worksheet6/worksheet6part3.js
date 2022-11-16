@@ -54,7 +54,7 @@ window.onload = function init()
         var myTexels = new Image();
         //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, image);
-        gl.uniform1i(gl.getUniformLocation(gl.program, "texMap"), 0);
+        //gl.uniform1i(gl.getUniformLocation(gl.program, "texMap"), 0);
     };
     image.src = 'earth.jpg';
     
