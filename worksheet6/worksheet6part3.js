@@ -36,7 +36,7 @@ window.onload = function init()
     var modelViewMatrixLoc = gl.getUniformLocation(program, "ModelViewPosition");
     gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
 
-    var image = document.createElement('earth');
+    var image = document.createElement('img');
     image.crossorigin = 'anonymous';
     image.onload = function () {
         // Insert WebGL texture initialization here
@@ -47,7 +47,6 @@ window.onload = function init()
         
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-        // gl.generateMipmap(gl.TEXTURE_2D);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //hmm
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
