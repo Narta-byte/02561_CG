@@ -170,7 +170,6 @@ window.onload = function init()
     gl.vertexAttribPointer(vTexture, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vTexture);
 
-   
 
     gl.generateMipmap(gl.TEXTURE_2D);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);

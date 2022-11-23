@@ -54,7 +54,7 @@
            gl_Position = ModelViewPosition*V*a_Position;
 
            //E = (ModelViewPosition * vec4(eye,1)).xyz;
-           N = normalize((ModelViewPosition*(a_Normals)).xyz);  // 
+           N = normalize(((a_Normals)).xyz);  // 
            L =(ModelViewPosition*lightPos).xyz;
 
            //gl_Position.x = cos(betaloc)*a_Position.x+sin(betaloc)*(-a_Position.y);
@@ -65,7 +65,7 @@
            //gl_Position.y =  a_Position.z;
            //gl_Position.z =  cos(betaloc)*a_Position.y+sin(betaloc)*(a_Position.x);
            //gl_Position.w = 1.0;
-           v_Color = kd*lightEmis*max(dot(normalize(a_Normals.xyz),w_i),0.0);
+           v_Color = lightEmis*max(dot(normalize(a_Normals.xyz),w_i),0.0);
            v_Color.w = 1.0;
 
                }
@@ -83,12 +83,11 @@
         void main() {
             //gl_FragColor = texture2D(texMap, fTexCoord);
             normN = normalize(N);
-            float u = 1.0-(atan(normN.z, normN.x)/(2.0*3.1415)); //HMMMM
-            float v = acos(normN.y)/3.1415; //HMMMM
+            float u = 1.0-(atan(normN.z, normN.x)/(2.0*3.1415926536)); //HMMMM
+            float v = acos(normN.y)/3.1415926536; //HMMMM
             vec2 texCoord = vec2(u,v); //HMMM
-            //gl_FragColor = v_Color * texture2D(texMap, fTexCoord);
-            gl_FragColor = texture2D(texMap, fTexCoord);
-        }
+            gl_FragColor = v_Color* texture2D(texMap, texCoord);
+        }   
         //varying vec4 fColor;
         //void main()
         //{

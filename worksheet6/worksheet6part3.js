@@ -9,7 +9,7 @@ window.onload = function init()
 
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
-   
+    gl.frontFace(gl.CW);
 
     
 
@@ -123,13 +123,10 @@ window.onload = function init()
             
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //hmm
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST); //hmm
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, image);
             gl.generateMipmap(gl.TEXTURE_2D); //hmm
-            var myTexels = new Image();
-            //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, image);
             gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0);
     };
     image.src = 'earth.jpg';
