@@ -86,7 +86,8 @@
             float u = 1.0-(atan(normN.z, normN.x)/(2.0*3.1415)); //HMMMM
             float v = acos(normN.y)/3.1415; //HMMMM
             vec2 texCoord = vec2(u,v); //HMMM
-            gl_FragColor = v_Color * texture2D(texMap, fTexCoord);
+            //gl_FragColor = v_Color * texture2D(texMap, fTexCoord);
+            gl_FragColor = texture2D(texMap, fTexCoord);
         }
         //varying vec4 fColor;
         //void main()

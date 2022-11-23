@@ -36,27 +36,27 @@ window.onload = function init()
     var modelViewMatrixLoc = gl.getUniformLocation(program, "ModelViewPosition");
     gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
 
-    var image = document.createElement('img');
-    image.crossorigin = 'anonymous';
-    image.onload = function () {
-        // Insert WebGL texture initialization here
-        var texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
+    // var image = document.createElement('img');
+    // image.crossorigin = 'anonymous';
+    // image.onload = function () {
+    //     // Insert WebGL texture initialization here
+    //     var texture = gl.createTexture();
+    //     gl.bindTexture(gl.TEXTURE_2D, texture);
         
-        gl.generateMipmap(gl.TEXTURE_2D); //hmm
+    //     gl.generateMipmap(gl.TEXTURE_2D); //hmm
         
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //hmm
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //hmm
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
 
-        var myTexels = new Image();
-        //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, image);
-        //gl.uniform1i(gl.getUniformLocation(gl.program, "texMap"), 0);
-    };
-    image.src = 'earth.jpg';
+    //     var myTexels = new Image();
+    //     //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    //     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, image);
+    //     gl.uniform1i(gl.getUniformLocation(gl.program, "texMap"), 0);
+    // };
+    // image.src = 'earth.jpg';
     
     spaghetti()
     function spaghetti() {
@@ -112,6 +112,29 @@ window.onload = function init()
         // var acolor = gl.getAttribLocation(program, "a_Color");
         // gl.vertexAttribPointer(acolor, 4, gl.FLOAT, false, 0, 0);
         // gl.enableVertexAttribArray(acolor);
+
+        var image = document.createElement('img');
+        image.crossorigin = 'anonymous';
+        image.onload = function () {
+            // Insert WebGL texture initialization here
+            var texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            
+            
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //hmm
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            
+            gl.generateMipmap(gl.TEXTURE_2D); //hmm
+            var myTexels = new Image();
+            //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, image);
+            gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0);
+    };
+    image.src = 'earth.jpg';
+
+
     }
     var poi = document.getElementById("Increase subdivision");
     poi.addEventListener("click", function (ev) {

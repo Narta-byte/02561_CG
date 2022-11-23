@@ -39,13 +39,22 @@ window.onload = function init()
     var ks = 1.0;
     var s = 10.0;
     var le = vec4(1.0,1.0,1.0,1.0);
-
-    initObject(program, obj_filename, scale)
+    obj_filename = "Katrine.obj";
 
     
-
-
-
+    // function initObject(gl, obj_filename, scale)
+    // {
+        program.a_Position = gl.getAttribLocation(program, 'a_Position');
+        program.a_Normal = gl.getAttribLocation(program, 'a_Normal');
+        program.a_Color = gl.getAttribLocation(program, 'a_Color');
+        // Prepare empty buffer objects for vertex coordinates, colors, and normals
+        var model = initVertexBuffers(gl,program);
+        // Start reading the OBJ file
+        readOBJFile("worksheet5\Katrine.obj", gl, model, 4, true);
+        // return model;
+    // }
+    // initObject(program, obj_filename, 0.5)
+    
     gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
 
     draw()
@@ -69,6 +78,12 @@ window.onload = function init()
         var vPosition = gl.getAttribLocation(program, "a_Position");
         gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(vPosition);
+
+        
+
+
+
+
         // Perspective
         var p = perspective(90, (canvas.height/canvas.width), 1, 5);
         var P = gl.getUniformLocation(program,"P");
@@ -127,17 +142,7 @@ window.onload = function init()
         // gl.vertexAttribPointer(acolor, 4, gl.FLOAT, false, 0, 0);
         // gl.enableVertexAttribArray(acolor);
     }
-    function initObject(gl, obj_filename, scale)
-    {
-    gl.program.a_Position = gl.getAttribLocation(gl.program, 'a_Position');
-    gl.program.a_Normal = gl.getAttribLocation(gl.program, 'a_Normal');
-    gl.program.a_Color = gl.getAttribLocation(gl.program, 'a_Color');
-    // Prepare empty buffer objects for vertex coordinates, colors, and normals
-    var model = initVertexBuffers(gl);
-    // Start reading the OBJ file
-    readOBJFile(obj_filename, gl, model, scale, true);
-    return model;
-    }
+    
     var poi = document.getElementById("Increase subdivision");
     poi.addEventListener("click", function (ev) {
         console.log("Increase subdivision");
@@ -319,7 +324,9 @@ window.onload = function init()
         gl.frontFace(gl.CCW);
         gl.cullFace(gl.BACK);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.drawArrays(gl.TRIANGLES,0, numPoints);
+        // gl.drawArrays(gl.TRIANGLES,0, numPoints);
+        gl.drawElements(gl.TRIANGLES, g_drawingInfo.indices.length,
+            gl.UNSIGNED_SHORT, 0);
     }
     function tick() { render(gl, pointsArray.length); requestAnimationFrame(tick);
      }
