@@ -56,7 +56,7 @@ window.onload = function init()
      gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
      gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
      gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
+     
      for(var i = 0; i < 6; ++i) {
         var image = document.createElement('img');
         image.crossorigin = 'anonymous';
@@ -128,53 +128,48 @@ window.onload = function init()
         if (g_tex_ready < 6) {
             return;
         }
-        // gl.clear(gl.COLOR_BUFFER_BIT| gl.DEPTH_BUFFER_BIT);
-          
+        gl.clear(gl.COLOR_BUFFER_BIT| gl.DEPTH_BUFFER_BIT);
         gl.frontFace(gl.CCW);
-
         DrawSphereUVMap = false;
         gl.uniform1i(UVLOC,DrawSphereUVMap);
-
         theta+=0.01;
         gl.uniform1f(thetaLoc,theta);
-        
         var p = perspective(120., (canvas.height/canvas.width), 1, 2000.0);
         gl.uniformMatrix4fv(Ploc,false,flatten(p));
-        
-
         var eye = vec3(1*Math.sin(theta),0,1*Math.cos(theta))
         // var eye = vec3(0.0,1,0.0001)
         var at = vec3(0.,0.,0.)
         var up = vec3(0.,1,0)
         var VA = lookAt(eye,at,up);
         gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
-        
         var viewMatrix = inverse(VA);
-
         var viewDirectionProjectionMatrix = mult(p, viewMatrix);
         var viewDirectionProjectionInverseMatrix = inverse(viewDirectionProjectionMatrix);
-
         gl.uniformMatrix4fv(viewDirectionProjectionInverseLocation, false, flatten(viewDirectionProjectionInverseMatrix));
-
 
         var mTex = mat4();
         gl.uniformMatrix4fv(MtexLoc,false,flatten(mTex));
-
         gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(mat4()));
         gl.uniformMatrix4fv(Ploc,false,flatten(mat4()));
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         
         DrawSphereUVMap = true;
         gl.uniform1i(UVLOC,DrawSphereUVMap);
-       
+        var worldMatrix = rotateY(theta);
+        var viewMatrix = [    // Hmm
+            p,
+            translate(0, 0, -3)
+        ].reduce(mult);
+        var mTex = [
+            inverse(worldMatrix),
+            inverse(viewMatrix)
+        ].reduce(mult); // HMM
+        gl.uniformMatrix4fv(MtexLoc,false,flatten(mTex));
         var VA = lookAt(eye,at,up);
         gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
-
         // var p = perspective(120., (canvas.height/canvas.width), 1, 2000.0);
         gl.uniformMatrix4fv(Ploc,false,flatten(p));
         gl.frontFace(gl.CW);
-        
-
         gl.drawArrays(gl.TRIANGLES, 6, vertices.length-6);
 
 

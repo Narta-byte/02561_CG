@@ -38,8 +38,10 @@
        void main() {
            vPosition = a_Position;
            fTexCoord = v_Texture;
-           //N =  (vec4(normalize(((a_Normals)).xyz),1.)).xyz;
-           //N = (u_viewDirectionProjectionInverse * vec4(N,1)).xyz;
+           N =  (vec4(normalize(((a_Normals)).xyz),1.)).xyz;
+          // N = normalize(((a_Normals)).xyz);
+           //N = a_Normals.xyz;
+           N = (u_viewDirectionProjectionInverse * vec4(N,1)).xyz;
            fN = mTex*a_Position;
            gl_Position = P * ModelViewPosition * a_Position;
            v_Color = a_Normals;
@@ -53,8 +55,8 @@
         varying vec2 fTexCoord;
         uniform samplerCube texMap;
         varying vec4 v_Color;
-        vec3 normN;
-        vec3 N;
+        varying vec3 normN;
+        varying vec3 N;
         varying vec4 fN;
         varying vec4 vPosition;
         uniform  bool DrawSphereUVMap;
@@ -64,10 +66,10 @@
         void main() {
             
         if (DrawSphereUVMap) {
-            normN = normalize(N);
-            vec4 t =  vPosition;
-            gl_FragColor = textureCube(texMap, normN);//find ud af nornN
-            //gl_FragColor =v_Color;
+           // normN = (N);
+            vec4 t = u_viewDirectionProjectionInverse * vPosition;
+            gl_FragColor = textureCube(texMap,normalize(fN.xyz/fN.w));//find ud af nornN
+            //gl_FragColor =-v_Color;
             
         } else {
             vec4 t = u_viewDirectionProjectionInverse * vPosition;
