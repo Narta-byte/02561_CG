@@ -32,6 +32,13 @@ window.onload = function init()
         vec4(4, -1, -21, 1), //c
         vec4(-4, -1, -21, 1), //d
         ];
+
+        var vertices = [
+        vec4(-4, -1, -1, 1), //a
+        vec4(4, -1, -1, 1), //b
+        vec4(4, -1, -21, 1), //c
+        vec4(-4, -1, -21, 1), //d
+        ];
     var texCoords = [
         vec2(-1.5, 0.0),
         vec2(2.5, 0.0),
@@ -224,7 +231,7 @@ window.onload = function init()
         gl.clear(gl.COLOR_BUFFER_BIT );
         gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
         // gl.drawElements(gl.TRIANGLES, numIndices, gl.UNSIGNED_BYTE, 0);
-        // gl.drawElements(gl.TRIANGLE_FAN, numIndices, gl.UNSIGNED_BYTE, 0);
+        // gl.drawElements(gl.TRIANGLE_FAN, 4, gl.UNSIGNED_BYTE, 0);
     }
     function tick() { render(gl, vertices.length); requestAnimationFrame(tick);
      }

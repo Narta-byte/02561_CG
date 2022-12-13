@@ -57,23 +57,40 @@ window.onload = function init()
     //     gl.uniform1i(gl.getUniformLocation(gl.program, "texMap"), 0);
     // };
     // image.src = 'earth.jpg';
-    var image = document.createElement('img');
+    var g_tex_ready = 0;
+    function initTexture()
+    {
+     var cubemap = ['textures/cm_left.png', // POSITIVE_X
+                    'textures/cm_right.png', // NEGATIVE_X
+                    'textures/cm_top.png', // POSITIVE_Y
+                    'textures/cm_bottom.png', // NEGATIVE_Y
+                    'textures/cm_back.png', // POSITIVE_Z
+                    'textures/cm_front.png']; // NEGATIVE_Z
+     gl.activeTexture(gl.TEXTURE0);
+     var texture = gl.createTexture();
+     gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+     for(var i = 0; i < 6; ++i) {
+        var image = document.createElement('img');
         image.crossorigin = 'anonymous';
-        image.onload = function () {
-            // Insert WebGL texture initialization here
-            var texture = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, texture);
-            
-            
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST); //hmm
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, image);
-            gl.generateMipmap(gl.TEXTURE_2D); //hmm
-            gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0);
-    };
-    image.src = 'earth.jpg';
+        image.textarget = gl.TEXTURE_CUBE_MAP_POSITIVE_X + i;
+        image.onload = function(event)
+        {
+            var image = event.target;
+            gl.activeTexture(gl.TEXTURE0);
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+            gl.texImage2D(image.textarget, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+            ++g_tex_ready;
+        };
+     image.src = cubemap[i];
+     }
+     gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0);
+    }
+    initTexture()
+
+    
     spaghetti()
     function spaghetti() {
         pointsArray = []
@@ -129,8 +146,7 @@ window.onload = function init()
         // gl.vertexAttribPointer(acolor, 4, gl.FLOAT, false, 0, 0);
         // gl.enableVertexAttribArray(acolor);
 
-        
-
+       
 
     }
     var poi = document.getElementById("Increase subdivision");
@@ -190,17 +206,17 @@ window.onload = function init()
         var ac = normalize(mix(a, c, 0.5), true);
         var bc = normalize(mix(b, c, 0.5), true);
 
-        normalsArray.push(a);
-        normalsArray.push(b);
-        normalsArray.push(c);
-        pointsArray.push(a);
-        color.push(a)
-        pointsArray.push(b);
-        color.push(b)
+        // normalsArray.push(a);
+        // normalsArray.push(b);
+        // normalsArray.push(c);
+        // pointsArray.push(a);
+        // color.push(a)
+        // pointsArray.push(b);
+        // color.push(b)
 
-        pointsArray.push(c);
-        color.push(c)
-
+        // pointsArray.push(c);
+        // color.push(c)
+        pointsArray.push(a,b,c)
         // pointsArray.push(vec3(a,b,c))
         index += 3;
     }
@@ -210,6 +226,10 @@ window.onload = function init()
 
     function render(gl, numPoints)
     {
+        if (g_tex_ready < 6) {
+            return;
+        }
+
         beta += 0.01;
         alpha +=0.01;
         eye = vec3(r*Math.sin(alpha),0,r*Math.cos(alpha))

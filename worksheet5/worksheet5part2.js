@@ -6,26 +6,17 @@ window.onload = function init()
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
+    // gl.cullFce(gl.BACK);
 
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
    
-    gl.cullFace(gl.BACK);
     gl.frontFace(gl.CCW);
     
  
 
     var pointsArray = []
     var index = 0 
-    var vb = vec4(0.0, 0.942809, -0.333333, 1);
-    var vc = vec4(-0.816497, -0.471405, -0.333333, 1);
-    var vd = vec4(0.816497, -0.471405, -0.333333, 1);
-    var vBuffer = gl.createBuffer();
-    var numTimesToSubdivide = 3;
-    var numSubdivs = 3;
-    var va = vec4(0.0, 0.0, 1.0, 1);
-    var color = []
-    var normalsArray = []
     var betaloc = gl.getUniformLocation(program, "betaloc");
     var beta = 0.0;
     var alphaloc = gl.getUniformLocation(program, "alphaloc");
@@ -49,6 +40,19 @@ window.onload = function init()
     var p = perspective(45, (canvas.height/canvas.width), 0.01, 100);
     var P = gl.getUniformLocation(program,"P");
     gl.uniformMatrix4fv(P,false,flatten(p));
+
+    var Ka = 0.0;
+    var kd = 1.0;
+    var ks = 1.0;
+    var a = 0.0;
+    var s = 10.0;
+    var le = vec4(1.0,1.0,1.0,1.0);
+
+
+
+
+
+
 
     spaghetti()
     function spaghetti() {
@@ -83,6 +87,12 @@ window.onload = function init()
         // gl.vertexAttribPointer(acolor, 4, gl.FLOAT, false, 0, 0);
         // gl.enableVertexAttribArray(acolor);
     }
+    var leloc = gl.getUniformLocation(program,"leloc");
+    var kdloc = gl.getUniformLocation(program,"kdloc");
+    var kaloc = gl.getUniformLocation(program,"kaloc");
+    var ksloc = gl.getUniformLocation(program,"ksloc");
+    var sloc = gl.getUniformLocation(program,"sloc");
+    var eyeloc = gl.getUniformLocation(program,"eyeloc");
 
     function render(gl, numPoints)
     {
@@ -100,8 +110,13 @@ window.onload = function init()
         // up = vec3(0.,1.,0)
         // VA = lookAt(eye,at,up);
         gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
-
-
+        gl.uniform4f(leloc,le[0],le[0],le[0],le[0]);
+        gl.uniform4f(kdloc,kd,kd,kd,kd);
+        gl.uniform4f(kaloc,Ka,Ka,Ka,Ka);
+        gl.uniform4f(ksloc,ks,ks,ks,ks);
+        gl.uniform1f(sloc,s);
+        gl.uniform3f(eyeloc,eye[0],eye[1],eye[2]);
+        
         gl.uniform1f(betaloc,beta)
         gl.uniform1f(alphaloc,alpha)
         // gl.cullFace(gl.BACK);

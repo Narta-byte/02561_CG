@@ -9,13 +9,13 @@ window.onload = function init()
 
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
-    var indices = [
-        0,1,
-        0,3,
-        1,2,
-        2,3,
-    ]
-
+    // var indices = [
+    //     0,1,
+    //     0,3,
+    //     1,2,
+    //     2,3,
+    // ]
+   
     
     // var vertices = [
     //     vec4(-4, -1, -1, 1),

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <script type="text/javascript" src="../common/angelCommon/initShaders.js"></script>
+    <script type="text/javascript" src="../common/angelCommon/webgl-utils.js"></script>
+    <script type="text/javascript" src="../common/angelCommon/MV.js"></script>
+    <script type="text/javascript" src="worksheet7part2Attempt2.js"></script>
+    <script id="quad-vertex-shader" type="x-shader/x-vertex">
+        #ifdef GL_ES
+        precision mediump float;
+        #endif
+        
+        attribute vec4 a_Position;
+        attribute vec4 a_Color;
+        uniform float betaloc;
+        varying vec4 v_Color;
+        uniform vec4 translation;
+        uniform float tx_h;
+        uniform float ty_h;
+
+        uniform mat4 P;
+        uniform float V;
+        uniform float M;
+
+        uniform mat4 ModelViewPosition;
+
+        varying vec2 fTexCoord;
+        attribute vec2 v_Texture;
+
+        varying vec3 N;
+        attribute vec4 a_Normals;
+        varying  vec4 vPosition;
+
+        uniform mat4 mTex;
+        varying vec4 fN;
+        uniform float theta;
+        varying vec3 R;
+        uniform mat4 u_viewDirectionProjectionInverse;
+       void main() {
+           vPosition = a_Position;
+           fTexCoord = v_Texture;
+           //N =  (vec4(normalize(((a_Normals)).xyz),1.)).xyz;
+           //N = (u_viewDirectionProjectionInverse * vec4(N,1)).xyz;
+           fN = mTex*a_Position;
+           gl_Position = P * ModelViewPosition * a_Position;
+           v_Color = a_Normals;
+           //gl_Position.z = 1.;
+               }
+    </script>
+    
+    <script id="quad-fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        //uniform sampler2D texMap; //hmm
+        varying vec2 fTexCoord;
+        uniform samplerCube texMap;
+        varying vec4 v_Color;
+        vec3 normN;
+        vec3 N;
+        varying vec4 fN;
+        varying vec4 vPosition;
+        uniform  bool DrawSphereUVMap;
+
+        // the following line is from https://webglfundamentals.org/webgl/lessons/webgl-skybox.html
+        uniform mat4 u_viewDirectionProjectionInverse;
+        void main() {
+            
+        if (DrawSphereUVMap) {
+            normN = normalize(N);
+            vec4 t =  vPosition;
+            gl_FragColor = textureCube(texMap, normN);//find ud af nornN
+            //gl_FragColor =v_Color;
+            
+        } else {
+            vec4 t = u_viewDirectionProjectionInverse * vPosition;
+            gl_FragColor = textureCube(texMap,  normalize(t.xyz / t.w));
+            //normN = normalize(N);
+            //gl_FragColor = textureCube(texMap, N);
+            
+            
+            
+        }
+            
+           // gl_FragColor = v_Color;
+        }
+        </script>
+    
+
+    <body>
+        <canvas id="canvas" width = "512" height = "512"> </canvas>
+        <br>
+    </body>
+   
+</html>
+
+
+//vec3 angles =radians(vec3(theta,theta,theta ));
+            //vec3 c = cos(angles);
+            //vec3 s = sin(angles);
+            //mat4 rx = mat4(1.0, 0.0, 0.0, 0.0,
+            //               0.0, c.x, s.x, 0.0,
+            //               0.0, -s.x, c.x, 0.0,
+            //               0.0, 0.0, 0.0, 1.0);
+            //mat4 ry = mat4(c.y, 0.0, -s.y, 0.0,
+            //               0.0, 1.0, 0.0, 0.0,
+            //               s.y, 0.0, c.y, 0.0,
+            //               0.0, 0.0, 0.0, 1.0);
+            //mat4 rz = mat4(c.z, -s.z, 0.0, 0.0,
+            //               s.z, c.z, 0.0, 0.0,
+            //               0.0, 0.0, 1.0, 0.0,
+            //               0.0, 0.0, 0.0, 1.0);
+            //mat4 ModelView = rz * ry * rx;
+            //vec4 eyePos = ModelView * a_Position;
+            //vec4 NN = ModelView * a_Normals;
+            //R = reflect(eyePos.xyz, NN.xyz);  
