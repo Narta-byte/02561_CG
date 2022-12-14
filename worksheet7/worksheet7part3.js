@@ -78,7 +78,7 @@ window.onload = function init()
 
     index = 6
 
-    tetrahedron(va, vb, vc, vd, 3);
+    tetrahedron(va, vb, vc, vd, 5);
 
 
     var vBuffer = gl.createBuffer();
@@ -171,6 +171,8 @@ window.onload = function init()
         ].reduce(mult); // HMM
         gl.uniformMatrix4fv(MtexLoc,false,flatten(mTex));
         var eye = vec3(2*Math.sin(theta),0,2*Math.cos(theta))
+        gl.uniform3f (u_worldCameraPositionLOC,eye[0],eye[1],eye[2]);
+       
         var VA = lookAt(eye,at,up);
         gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
         // var p = perspective(120., (canvas.height/canvas.width), 1, 2000.0);

@@ -101,7 +101,7 @@
             vec3 direction = reflect(eyeToSurfaceDir,worldNormal);
             
             gl_FragColor = textureCube(texMap, -direction);
-            gl_FragColor = textureCube(texMap, -normalize(reflect((N.xyz-eyeToSurfaceDir),N.xyz)));
+            gl_FragColor = textureCube(texMap, normalize(reflect((N.xyz-u_worldCameraPosition),N.xyz)));
             //gl_FragColor =-v_Color;
             
         } else {
