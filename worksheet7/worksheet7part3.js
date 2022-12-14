@@ -78,7 +78,7 @@ window.onload = function init()
 
     index = 6
 
-    tetrahedron(va, vb, vc, vd, 5);
+    tetrahedron(va, vb, vc, vd, 3);
 
 
     var vBuffer = gl.createBuffer();

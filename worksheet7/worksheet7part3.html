@@ -3,7 +3,7 @@
     <script type="text/javascript" src="../common/angelCommon/initShaders.js"></script>
     <script type="text/javascript" src="../common/angelCommon/webgl-utils.js"></script>
     <script type="text/javascript" src="../common/angelCommon/MV.js"></script>
-    <script type="text/javascript" src="worksheet7part2Attempt2.js"></script>
+    <script type="text/javascript" src="worksheet7part3.js"></script>
     <script id="quad-vertex-shader" type="x-shader/x-vertex">
         #ifdef GL_ES
         precision mediump float;
@@ -99,7 +99,9 @@
             vec3 worldNormal = normalize(v_worldNormal);
             vec3 eyeToSurfaceDir = normalize(v_worldPosition - u_worldCameraPosition);
             vec3 direction = reflect(eyeToSurfaceDir,worldNormal);
-            gl_FragColor = textureCube(texMap, N);
+            
+            gl_FragColor = textureCube(texMap, -direction);
+            gl_FragColor = textureCube(texMap, -normalize(reflect((N.xyz-eyeToSurfaceDir),N.xyz)));
             //gl_FragColor =-v_Color;
             
         } else {
