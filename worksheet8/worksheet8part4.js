@@ -4,8 +4,9 @@ window.onload = function init()
     var gl = canvas.getContext("webgl");
     gl.clearColor(0.3921, 0.5843, 0.9294, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    // gl.enable(gl.DEPTH_TEST);
-    // gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.DEPTH_TEST);
+    
+    //gl.depthFunc(gl.GREATER)
 
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
@@ -173,7 +174,8 @@ window.onload = function init()
     gl.drawElements(gl.TRIANGLES, 12, gl.UNSIGNED_BYTE, 6);
     var time = 0.0;
 
-
+    var visibilityLoc = gl.getUniformLocation(program, "visibility");
+    gl.uniform1f(visibilityLoc, 0.0);
     
     var projectionMatrix = mat4();
     projectionMatrix[3][3] = 0;
@@ -193,7 +195,7 @@ window.onload = function init()
 
        
 
-        
+        gl.uniform1f(visibilityLoc, 1.0);
         gl.uniformMatrix4fv(Ploc,false,flatten(p));
         modelMatrix = mat4()
         gl.uniformMatrix4fv(modelMatrixLoc, false, flatten(modelMatrix));
@@ -206,17 +208,23 @@ window.onload = function init()
 
         time = time + 0.05;
  
+        gl.uniform1f(visibilityLoc, 0.0);
         
         lightPos = vec3(2 * Math.sin(time), 2, -2 +2 * Math.cos(time));
-
+        projectionMatrix[3][3] +=0.001 
         var shadowModelMatrix = [
             translate(lightPos),
             projectionMatrix,
             translate(-lightPos[0], -lightPos[1], -lightPos[2])
         ].reduce(mult);
-
+        projectionMatrix[3][3] -=0.001 
         gl.uniformMatrix4fv(modelMatrixLoc, false, flatten(shadowModelMatrix));
+        
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         gl.drawElements(gl.TRIANGLES, 12, gl.UNSIGNED_BYTE, 6);
+        
+        gl = WebGLUtils.setupWebGL(canvas, { alpha: false });
         // gl.drawElements(gl.TRIANGLES, numPoints, gl.UNSIGNED_BYTE, 0);
 
         // gl.drawArrays(gl.TRIANGLES, 4, numPoints-4);
