@@ -74,7 +74,24 @@ window.onload = function init()
      gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0);
     }
     initTexture()
-    
+    var image = document.createElement('img');
+        image.crossorigin = 'anonymous';
+        image.onload = function () {
+            // Insert WebGL texture initialization here
+            gl.activeTexture(gl.TEXTURE1);
+            var texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            
+            
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST); //hmm
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB,gl.UNSIGNED_BYTE, image);
+            gl.generateMipmap(gl.TEXTURE_2D); //hmm
+            gl.uniform1i(gl.getUniformLocation(program, "bumpmap"), 1);
+    };
+    image.src = 'textures/normalmap.png';
 
     index = 6
 
@@ -164,6 +181,8 @@ window.onload = function init()
         
         gl.uniformMatrix4fv(MtexLoc,false,flatten(mTex));
         var eye = vec3(2*Math.sin(theta),0,2*Math.cos(theta))
+        gl.uniform3f (u_worldCameraPositionLOC,eye[0],eye[1],eye[2]);
+       
         var VA = lookAt(eye,at,up);
         gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
         // var p = perspective(120., (canvas.height/canvas.width), 1, 2000.0);

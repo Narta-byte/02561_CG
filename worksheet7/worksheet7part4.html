@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <script type="text/javascript" src="../common/angelCommon/initShaders.js"></script>
+    <script type="text/javascript" src="../common/angelCommon/webgl-utils.js"></script>
+    <script type="text/javascript" src="../common/angelCommon/MV.js"></script>
+    <script type="text/javascript" src="worksheet7part4.js"></script>
+    <script id="quad-vertex-shader" type="x-shader/x-vertex">
+       
+        precision mediump float;
+
+// Declare the input variables from the vertex shader
+attribute vec4 a_Position;
+attribute vec4 a_Normals;
+attribute vec2 v_Texture;
+
+// Declare the uniforms used in the vertex shader
+uniform mat4 P;
+uniform mat4 ModelViewPosition;
+uniform mat4 u_world;
+
+// Declare the output variables from the vertex shader
+varying vec4 vPosition;
+varying vec2 fTexCoord;
+varying vec3 N;
+varying vec3 v_worldPosition;
+varying vec3 v_worldNormal;
+
+void main() {
+  // Set the output variables from the vertex shader
+  vPosition = a_Position;
+  fTexCoord = v_Texture;
+  N = normalize(a_Normals.xyz);
+  gl_Position = P * ModelViewPosition * a_Position;
+
+  // Send the view position and normal to the fragment shader
+  v_worldPosition = (u_world * a_Position).xyz;
+  v_worldNormal = mat3(u_world) * a_Normals.xyz;
+}
+    </script>
+    
+    <script id="quad-fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        //uniform sampler2D texMap; //hmm
+        varying vec2 fTexCoord;
+        uniform samplerCube texMap;
+        varying vec4 v_Color;
+        vec3 normN;
+        varying vec3 N;
+        varying vec4 fN;
+        varying vec4 vPosition;
+        uniform bool DrawSphereUVMap;
+
+        // the following line is from https://webglfundamentals.org/webgl/lessons/webgl-skybox.html
+        uniform mat4 u_viewDirectionProjectionInverse;
+
+
+        // Passed in from the vertex shader.
+        varying vec3 v_worldPosition;
+        varying vec3 v_worldNormal;
+
+        // The position of the camera
+        uniform vec3 u_worldCameraPosition;
+        uniform sampler2D bumpmap;
+
+        vec3 rotate_to_normal(vec3 n, vec3 v) {
+            float sgn_nz = sign(n.z + 1.0e-12);
+            float a = -1.0/(1.0 + abs(n.z));
+            float b = n.x*n.y*a;
+            return vec3(1.0 + n.x*n.x*a, b, -sgn_nz*n.x)*v.x
+            + vec3(sgn_nz*b, sgn_nz*(1.0 + n.y*n.y*a), -n.y)*v.y
+            + n*v.z;
+           }
+        void main() {
+            
+        if (DrawSphereUVMap) {
+            normN =  normalize(reflect((N.xyz-u_worldCameraPosition),N.xyz));
+            vec3 reflectV =  normalize(reflect((N.xyz-u_worldCameraPosition),N.xyz));
+            float u = 1.0-(atan(reflectV.z, reflectV.x)/(2.0*3.1415926536)); 
+            float v = acos(reflectV.y)/3.1415926536; 
+            vec2 texCoord = vec2(u,v);
+
+            vec4 normalmap = texture2D(bumpmap,texCoord);
+            //gl_FragColor = texture2D(bumpmap,texCoord);
+            //gl_FragColor.xyz = reflectV.xyz;
+            vec3 rotatedNormals = rotate_to_normal(N,normalmap.xyz);
+            
+            vec3 worldNormal = normalize(v_worldNormal);
+            vec3 eyeToSurfaceDir = normalize(v_worldPosition - u_worldCameraPosition);
+            vec3 direction = reflect(eyeToSurfaceDir,worldNormal);
+            
+            
+            gl_FragColor = textureCube(texMap, rotatedNormals);
+            //gl_FragColor =-v_Color;
+            
+        } else {
+            vec4 t = u_viewDirectionProjectionInverse * vPosition;
+            gl_FragColor = textureCube(texMap,  normalize(t.xyz / t.w));
+            //normN = normalize(N);
+            //gl_FragColor = textureCube(texMap, N);
+            
+            
+            
+        }
+
+        
+            
+           // gl_FragColor = v_Color;
+        }
+        </script>
+    
+
+    <body>
+        <canvas id="canvas" width = "512" height = "512"> </canvas>
+        <br>
+    </body>
+   
+</html>
+
+
+//vec3 angles =radians(vec3(theta,theta,theta ));
+            //vec3 c = cos(angles);
+            //vec3 s = sin(angles);
+            //mat4 rx = mat4(1.0, 0.0, 0.0, 0.0,
+            //               0.0, c.x, s.x, 0.0,
+            //               0.0, -s.x, c.x, 0.0,
+            //               0.0, 0.0, 0.0, 1.0);
+            //mat4 ry = mat4(c.y, 0.0, -s.y, 0.0,
+            //               0.0, 1.0, 0.0, 0.0,
+            //               s.y, 0.0, c.y, 0.0,
+            //               0.0, 0.0, 0.0, 1.0);
+            //mat4 rz = mat4(c.z, -s.z, 0.0, 0.0,
+            //               s.z, c.z, 0.0, 0.0,
+            //               0.0, 0.0, 1.0, 0.0,
+            //               0.0, 0.0, 0.0, 1.0);
+            //mat4 ModelView = rz * ry * rx;
+            //vec4 eyePos = ModelView * a_Position;
+            //vec4 NN = ModelView * a_Normals;
+            //R = reflect(eyePos.xyz, NN.xyz);  

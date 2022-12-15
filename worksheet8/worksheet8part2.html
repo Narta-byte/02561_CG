@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <script type="text/javascript" src="../common/angelCommon/initShaders.js"></script>
+    <script type="text/javascript" src="../common/angelCommon/webgl-utils.js"></script>
+    <script type="text/javascript" src="../common/angelCommon/MV.js"></script>
+    <script type="text/javascript" src="worksheet8part2.js"></script>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 a_Position;
+        attribute vec4 a_Color;
+        uniform float betaloc;
+        varying vec4 v_Color;
+        uniform vec4 translation;
+        uniform float tx_h;
+        uniform float ty_h;
+
+        uniform mat4 P;
+        uniform float V;
+        uniform float M;
+
+        uniform mat4 ModelViewPosition;
+
+        varying vec2 fTexCoord;
+        attribute vec2 v_Texture;
+       void main() {
+           //v_Color = a_Color;
+           //gl_Position = a_Position;
+           //gl_Position.x = a_Position.x+tx_h;
+           //gl_Position.y = a_Position.y+ty_h;
+           //gl_Position.z = a_Position.z;
+           //gl_Position.w = a_Position.w;
+           fTexCoord = v_Texture;
+           gl_Position = P*a_Position;
+               //gl_Position.x = cos(betaloc)*a_Position.x+sin(betaloc)*(-a_Position.y);
+           //gl_Position.y = cos(betaloc)*a_Position.y+sin(betaloc)*(a_Position.x);
+           //gl_Position.z = a_Position.z;
+           //gl_Position.w = 1.0;
+               }
+
+
+            //attribute vec4 vPosition;
+            //attribute vec4 vColor;
+            //varying vec4 fColor;
+            //void main()
+            //{
+            //fColor = vColor;
+            //gl_Position = 0.5 * vPosition;
+            //}
+    </script>
+    
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        uniform sampler2D texMap; //hmm
+        varying vec2 fTexCoord;
+        varying vec4 v_Color;
+        void main() {
+            gl_FragColor = texture2D(texMap, fTexCoord);
+           // gl_FragColor = v_Color;
+        }
+        </script>
+    
+
+    <body>
+        <canvas id="canvas" width = "512" height = "512"> </canvas>
+        <br>
+       
+        <title> Hello World </title>
+        
+
+    </body>
+   
+</html>
