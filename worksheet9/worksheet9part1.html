@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <script type="text/javascript" src="../common/angelCommon/initShaders.js"></script>
+    <script type="text/javascript" src="../common/angelCommon/webgl-utils.js"></script>
+    <script type="text/javascript" src="../common/angelCommon/MV.js"></script>
+    <script type="text/javascript" src="../common/angelCommon/OBJParser.js"></script>
+    <script type="text/javascript" src="worksheet9part1.js"></script>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 a_Position;
+        varying vec4 v_Color;
+        uniform mat4 projectionMatrix;
+        uniform mat4 modelMatrix;
+        varying vec2 fTexCoord;
+        attribute vec2 v_Texture;
+       void main() {
+           fTexCoord = v_Texture;
+           gl_Position = projectionMatrix*modelMatrix*a_Position;
+               }
+
+    </script>
+    
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        uniform sampler2D texMap; //hmm
+        varying vec2 fTexCoord;
+        varying vec4 v_Color;
+        uniform float visibility;
+        void main() {
+           if (true) // If visibility is greater than 0
+            {
+                vec4 textureColor = texture2D(texMap, fTexCoord);
+                gl_FragColor = textureColor * 1.; // Multiply texture color by visibility
+            }
+            else // If visibility is 0 or less, draw shadow polygon in black
+        {
+            gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+            }
+        </script>
+
+        <script id="vertex-shader-teapot" type="x-shader/x-vertex">
+            attribute vec4 a_PositionTea; //vpos
+        attribute vec4 a_ColorTea;
+        attribute vec4 vNormal;
+        varying vec3 N, L, E;
+        uniform vec4 lightPosition;
+        attribute vec4 a_NormalsTea;
+        uniform vec4 lightPos;
+        uniform vec4 lightEmis;
+        varying vec4 v_ColorTea;
+        uniform mat4 projectionMatrixTea;
+        uniform mat4 V;
+        attribute vec4 vPosition;
+        varying vec4 fColor;    
+        uniform mat4 modelMatrixTea;
+        uniform float betaloc;
+        uniform float alphaloc;
+        uniform float ycomp;
+       void main() {
+           //vec4 kd = vec4(0.5*a_Position.xyz+0.5,1.0);
+           //vec4 pos = a_Position;
+           //vec3 w_i = normalize(lightPos.xyz);
+           vec4 scaleVector = vec4(0.25,0.25,0.25,1.);
+           vec4 translationVector = vec4(0,ycomp,0,1);
+           gl_Position = projectionMatrixTea*modelMatrixTea*a_PositionTea*scaleVector+translationVector;
+           //v_Color = kd*lightEmis*max(dot(normalize(a_NormalsTea.xyz),w_i),0.0);
+           v_ColorTea = vec4(1.,1.,1.,1.);
+           v_ColorTea.w = 1.0;
+               }
+    
+        </script>
+        
+        <script id="fragment-shader-teapot" type="x-shader/x-fragment">
+            precision mediump float;
+        varying vec4 v_ColorTea;
+        uniform float visibilityTea; 
+        
+        void main() {
+            gl_FragColor = v_ColorTea;
+            if (visibilityTea > 0.0) 
+            {
+                gl_FragColor = v_ColorTea;
+
+            }
+            else 
+        {
+            gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+        }
+            </script>
+    
+
+    <body>
+        <canvas id="canvas" width = "512" height = "512"> </canvas>
+        <br>
+       
+        <title> Hello World </title>
+        
+
+    </body>
+   
+</html>

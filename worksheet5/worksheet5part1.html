@@ -46,7 +46,7 @@
            vec4 pos = a_Position;
            vec3 w_i = normalize(lightPos.xyz);
        
-           gl_Position = ModelViewPosition*V*a_Position;
+           gl_Position = P*ModelViewPosition*V*a_Position;
            //gl_Position.x = cos(betaloc)*a_Position.x+sin(betaloc)*(-a_Position.y);
            //gl_Position.y = cos(betaloc)*a_Position.y+sin(betaloc)*(a_Position.x);
            //gl_Position.z = a_Position.z;

@@ -46,7 +46,7 @@ window.onload = function init()
     var model = initVertexBuffers(gl, program);
     readOBJFile('LilleKatrine.obj', gl, model, 4, true);
     // Perspective
-    var p = perspective(45, (canvas.height/canvas.width), 0.01, 100);
+    var p = perspective(90, (canvas.height/canvas.width), 0.01, 100);
     var P = gl.getUniformLocation(program,"P");
     gl.uniformMatrix4fv(P,false,flatten(p));
 
