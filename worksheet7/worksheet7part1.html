@@ -83,9 +83,9 @@
         void main() {
             //gl_FragColor = texture2D(texMap, fTexCoord);
             normN = normalize(N);
-            float u = 1.0-(atan(normN.z, normN.x)/(2.0*3.1415926536)); //HMMMM
-            float v = acos(normN.y)/3.1415926536; //HMMMM
-            vec2 texCoord = vec2(u,v); //HMMM
+            float u = 1.0-(atan(normN.z, normN.x)/(2.0*3.1415926536)); 
+            float v = acos(normN.y)/3.1415926536; 
+            vec2 texCoord = vec2(u,v);
             gl_FragColor = textureCube(texMap, normN);
         }   
         //varying vec4 fColor;

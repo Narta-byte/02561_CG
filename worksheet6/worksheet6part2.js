@@ -147,9 +147,9 @@ window.onload = function init()
     gl.uniformMatrix4fv(Ploc,false,flatten(p));
 
     //attribute
-    // var vTexture = gl.getAttribLocation(program, "v_Texture"); //hmm
-    // gl.vertexAttribPointer(vTexture, 2, gl.FLOAT, false, 0, 0); //hmm
-    // gl.enableVertexAttribArray(vTexture); //hmm
+    // var vTexture = gl.getAttribLocation(program, "v_Texture");
+    // gl.vertexAttribPointer(vTexture, 2, gl.FLOAT, false, 0, 0); 
+    // gl.enableVertexAttribArray(vTexture); 
     //unifrom
 
     
@@ -168,12 +168,12 @@ window.onload = function init()
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, texSize, texSize, 0, gl.RGBA, gl.UNSIGNED_BYTE, myTexels);
 
+    
     var texBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(texCoords),
     gl.STATIC_DRAW);
-
-    var vTexture = gl.getAttribLocation(program, "v_Texture"); //hmm
+    var vTexture = gl.getAttribLocation(program, "v_Texture"); 
     gl.vertexAttribPointer(vTexture, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vTexture);
 
@@ -185,7 +185,7 @@ window.onload = function init()
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
 
-    gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0); //hmmm
+    gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0); 
 
 
 

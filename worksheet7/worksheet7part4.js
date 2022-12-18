@@ -1,10 +1,3 @@
-/*
-TODO :
-    SKRIV BESKRIVELSE
-    LAV viewDirectionProjectionInverseLocation og den anden lange om til mtex
-*/
-
-
 
 window.onload = function init()
 {

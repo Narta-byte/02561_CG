@@ -113,7 +113,7 @@ window.onload = function init()
     gl.bufferData(gl.ARRAY_BUFFER, flatten(texCoords),
     gl.STATIC_DRAW);
 
-    var vTexture = gl.getAttribLocation(program, "v_Texture"); //hmm
+    var vTexture = gl.getAttribLocation(program, "v_Texture");
     gl.vertexAttribPointer(vTexture, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vTexture);
 
@@ -121,55 +121,30 @@ window.onload = function init()
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
-
-
-    gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0); //hmmm
+    gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0); 
 
 
 
     var modelMatrixLoc = gl.getUniformLocation(program,
         "modelMatrix");
-
-
-    // var VA = mat4();
-    // gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
-
-    // Initialize the model matrix
+   
     var modelMatrix = mat4();
-
-    // Apply a translation transformation to the model matrix
-    // modelMatrix = translate(0, 0, 0);
-
-    // Apply a rotation transformation to the model matrix
-    // modelMatrix = rotateY(45);
-
-    // Apply a scaling transformation to the model matrix
-    //modelMatrix = scale(modelMatrix, vec3(1,1,1));
 
     gl.uniformMatrix4fv(modelMatrixLoc,false,flatten(modelMatrix));
 
-
-
-    // Define the point light position and radius
     var lightPos = vec3(0, 2, -2);
     var lightRadius = 2;
 
-    // Define the ground plane equation (y = -1)
     var groundPlane = vec4(0, 1, 0, -1);
         
-    // Create the projection matrix that projects onto the ground plane
     var projectionMatrix = mat4();
     projectionMatrix[1][1] = (lightPos.y - groundPlane.w) / lightPos.y;
 
-    // Create the translation and model matrices
     var translationMatrix = translate(lightPos.x, lightPos.y, lightPos.z);
     var modelMatrix = mult(translationMatrix, modelMatrix);
 
-    // Concatenate the projection, translation, and model matrices to create the shadow model matrix
     var shadowModelMatrix = mult(projectionMatrix, modelMatrix);
 
-    // Draw the shadow polygons using the shadow model matrix
-    //drawShadowPolygons(shadowModelMatrix);
     gl.uniformMatrix4fv(modelMatrixLoc, false, flatten(shadowModelMatrix));
     gl.drawElements(gl.TRIANGLES, 12, gl.UNSIGNED_BYTE, 6);
     var time = 0.0;
@@ -179,7 +154,7 @@ window.onload = function init()
     
     var projectionMatrix = mat4();
     projectionMatrix[3][3] = 0;
-    projectionMatrix[3][1] = 1 / -(lightPos[1] - (-1)); // -1 is the ground y
+    projectionMatrix[3][1] = 1 / -(lightPos[1] - (-1));
 
     function render(gl, numPoints)
     {

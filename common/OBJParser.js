@@ -119,6 +119,12 @@ OBJDoc.prototype.parseNormal = function (sp) {
   return (new Normal(x, y, z));
 }
 
+OBJDoc.prototype.parseTexture = function (sp) {
+  var u = sp.getFloat();
+  var v = sp.getFloat();
+  return (new Texture(u,v));
+}
+
 OBJDoc.prototype.parseUsemtl = function (sp) {
   return sp.getWord();
 }
@@ -353,6 +359,12 @@ var Normal = function (x, y, z) {
   this.x = x;
   this.y = y;
   this.z = z;
+}
+
+//Texture object
+var Texture = function (u,v) {
+  this.u = u;
+  this.v = v;
 }
 
 //------------------------------------------------------------------------------

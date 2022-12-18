@@ -23,9 +23,6 @@ window.onload = function init()
     //     vec4(4, -1, -21, 1),
     //     vec4(-4, -1, -21, 1)
     //     ];
-/*
-│abcd│abdc│acbd│acdb│adbc│adcb│bacd│badc│bcad│bcda│bdac│bdca│cabd│cadb│cbad│cbda│cdab│cdba│dabc│dacb│dbac│dbca│dcab│dcba│
-*/
     var vertices = [
         vec4(-4, -1, -1, 1), //a
         vec4(4, -1, -1, 1), //b
@@ -37,7 +34,6 @@ window.onload = function init()
         vec2(2.5, 0.0),
         vec2(2.5, 10.0),
         vec2(-1.5, 10.0) ];
-    var numIndices = indices.length;
 
     //texture
     var numRows = 8;
@@ -73,9 +69,9 @@ window.onload = function init()
     gl.uniformMatrix4fv(Ploc,false,flatten(p));
 
     //attribute
-    // var vTexture = gl.getAttribLocation(program, "v_Texture"); //hmm
-    // gl.vertexAttribPointer(vTexture, 2, gl.FLOAT, false, 0, 0); //hmm
-    // gl.enableVertexAttribArray(vTexture); //hmm
+    // var vTexture = gl.getAttribLocation(program, "v_Texture"); 
+    // gl.vertexAttribPointer(vTexture, 2, gl.FLOAT, false, 0, 0); 
+    // gl.enableVertexAttribArray(vTexture); 
     //unifrom
 
     
@@ -99,7 +95,7 @@ window.onload = function init()
     gl.bufferData(gl.ARRAY_BUFFER, flatten(texCoords),
     gl.STATIC_DRAW);
 
-    var vTexture = gl.getAttribLocation(program, "v_Texture"); //hmm
+    var vTexture = gl.getAttribLocation(program, "v_Texture"); 
     gl.vertexAttribPointer(vTexture, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vTexture);
 
@@ -112,7 +108,7 @@ window.onload = function init()
     // gl.generateMipmap(gl.TEXTURE_2D);
 
 
-    gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0); //hmmm
+    gl.uniform1i(gl.getUniformLocation(program, "texMap"), 0);
 
 
 

@@ -57,13 +57,11 @@
             //gl_FragColor = texture2D(texMap, fTexCoord);
            // gl_FragColor = v_Color;
 
-           if (visibility > 0.0) // If visibility is greater than 0
-            {
+           if (visibility > 0.0) {
                 vec4 textureColor = texture2D(texMap, fTexCoord);
-                gl_FragColor = textureColor * visibility; // Multiply texture color by visibility
+                gl_FragColor = textureColor * visibility; 
             }
-            else // If visibility is 0 or less, draw shadow polygon in black
-        {
+            else {
             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
         }
             }

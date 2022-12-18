@@ -53,6 +53,7 @@ window.onload = function init()
     var n = 100;
     var r = 0.5;
     var circleTemp = [];
+
     canvas.addEventListener("click", function (ev) {
         gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
         // vertices.push(vec2(ev.target. ,ev.clientY))
