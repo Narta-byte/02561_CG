@@ -89,7 +89,6 @@ window.onload = function init()
         gl.uniformMatrix4fv(modelViewMatrixLoc,false,flatten(VA));
 
 
-        // KIG PÅ SENERE
         var vNormals = gl.getAttribLocation(program, "a_Normals");
         gl.vertexAttribPointer(vNormals, 4, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(vNormals);

@@ -62,14 +62,14 @@
         uniform vec4 ksloc;
         uniform float sloc;
         void main() {
-           vec3 w_i = -normalize(L); // 
+           vec3 w_i = -normalize(L); 
 
            vec3 w_o = -normalize(E);
            vec3 w_h = normalize(w_i+w_o);
            vec4 w_r = vec4(2.0*dot(w_i,normalize(N))*normalize(N)-w_i,1.0); 
-           vec4 l_rd =vec4(kdloc[0],0,0,0) * leloc*max(dot(w_i,normalize(N)),0.0); //difusion
-           vec4 l_rs =ksloc * leloc*(pow(max(dot(w_r.xyz,w_o),0.0),sloc)); //shininess
-           vec4 l_ra =kaloc*leloc; //ambient
+           vec4 l_rd =vec4(kdloc[0],0,0,0) * leloc*max(dot(w_i,normalize(N)),0.0); 
+           vec4 l_rs =ksloc * leloc*(pow(max(dot(w_r.xyz,w_o),0.0),sloc)); 
+           vec4 l_ra =kaloc*leloc;
            vec4 l_o = l_rd+l_rs+l_ra;
            gl_FragColor = vec4(l_o.x,l_o.y,l_o.z,1.0);
         }

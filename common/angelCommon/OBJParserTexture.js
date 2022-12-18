@@ -202,7 +202,6 @@ var OBJDoc = function (fileName) {
   
     // Devide to triangles if face contains over 3 points.
     if (face.vIndices.length > 3) {
-      console.log("hello")
       var n = face.vIndices.length - 2;
       var newVIndices = new Array(n * 3);
       var newNIndices = new Array(n * 3);

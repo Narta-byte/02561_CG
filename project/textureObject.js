@@ -60,10 +60,6 @@ window.onload = function init()
     
     var model = initVertexBuffers(gl, program);
     readOBJFile('uvCube.obj', gl, model, 0.425, true);
-    var mtlString = readMTLFile('matQuad.mtl');
-    var mtl = parseMTL(mtlString);
-    console.log(mtlString)
-    console.log(mtl)
 
     // Perspective
     var p = perspective(90, (canvas.height/canvas.width), 0.01, 200);
@@ -258,43 +254,6 @@ window.onload = function init()
     }
 
 
-    function readMTLFile(filePath) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', filePath, false);
-        xhr.send(null);
-        if (xhr.status === 200) {
-          return xhr.responseText;
-        } else {
-          console.error('Failed to load file: ' + filePath);
-          return '';
-        }
-      }
-
-    function parseMTL(mtlString) {
-        var mtl = {};
-        var lines = mtlString.split('\n');
-        var currentMaterial = "";
-        for (var i = 0; i < lines.length; i++) {
-          var line = lines[i].trim();
-          if (line.length === 0 || line[0] === '#') continue;
-          var parts = line.split(' ');
-          var key = parts[0];
-          var args = parts.slice(1);
-          if (key === 'newmtl') {
-            currentMaterial = args[0];
-            mtl[currentMaterial] = {};
-          } else if (key === 'Ka') {
-            mtl[currentMaterial].ambient = args.map(parseFloat);
-          } else if (key === 'Kd') {
-            mtl[currentMaterial].diffuse = args.map(parseFloat);
-          } else if (key === 'Ks') {
-            mtl[currentMaterial].specular = args.map(parseFloat);
-          } else if (key === 'Ns') {
-            mtl[currentMaterial].shininess = parseFloat(args[0]);
-          }
-        }
-        return mtl;
-      }
       function render(gl, numPoints)
       {
   
@@ -321,7 +280,7 @@ window.onload = function init()
           gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
           gl.cullFace(gl.BACK);
           //gl.drawElements(gl.TRIANGLES, g_drawingInfo.indices.length, gl.UNSIGNED_SHORT, 0);
-          gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_INT, 0);
+          gl.drawElements(gl.TRIANGLES, g_drawingInfo.indices.length, gl.UNSIGNED_INT, 0);
           
           
           // gl.drawArrays(gl.TRIANGLES,0, numPoints);
